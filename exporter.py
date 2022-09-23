@@ -1,5 +1,5 @@
 import prometheus_client
-
+import psutil
 import time
 import shutil
 
@@ -15,6 +15,7 @@ if __name__ == '__main__':
     # Generate some requests.
     while True:
         total, used, free = shutil.disk_usage("/")
-        SYSTEM_USAGE.labels('diskusage').set(used)
-        SYSTEM_USAGE.labels('diskfree').set(free)
+        SYSTEM_USAGE.labels('used').set(used)
+        SYSTEM_USAGE.labels('free').set(free)
         time.sleep(UPDATE_PERIOD)
+        SYSTEM_USAGE.labels('cpu_load').set(psutil.getloadavg()[0])
